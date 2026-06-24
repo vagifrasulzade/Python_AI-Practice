@@ -180,3 +180,22 @@ plt.figure(figsize=(8,5))
 plt.show()
 
 
+# 15 Mini nəticə hesabatı:
+
+print("""
+Dataset 120 tələbə məlumatından və 10 sütundan ibarətdir. Analiz zamanı müəyyən olundu ki, bəzi sütunlarda boş dəyərlər mövcuddur. GPA sütunundakı boş xanalar median ilə, Department sütunundakı boş xana isə ən çox təkrarlanan dəyərlə əvəz edildi.
+
+Statistik göstəricilərə əsasən GPA-nın orta qiyməti ilə medianı bir-birinə çox yaxındır. Bu da GPA göstəricilərinin balanslı paylandığını göstərir. MathScore nəticələrində isə median ortalamadan bir qədər yüksəkdir ki, bu da aşağı balların orta göstəriciyə təsir etdiyini göstərir.
+
+Outlier araşdırması həm IQR, həm də Z-score metodları ilə aparıldı. Nəticədə MathScore üzrə ciddi kənar dəyər aşkar edilmədi. Bu isə məlumatların ümumilikdə stabil olduğunu göstərir.
+
+Korrelyasiya analizində GPA ilə davamiyyət (AttendanceRate) arasında ən güclü müsbət əlaqə müşahidə edildi. Yazı və riyaziyyat nəticələri də GPA ilə nəzərəçarpacaq əlaqəyə malikdir. Riyaziyyat və yazı balları arasında isə ən yüksək qarşılıqlı əlaqə qeydə alındı.
+
+Fakültələr üzrə müqayisədə Economics tələbələri ən yüksək orta GPA göstəricisinə sahibdir. Tələbə sayına görə isə IT fakültəsi digərlərindən daha çox təmsil olunmuşdur.
+
+Təqaüd alan tələbələrin orta GPA göstəricisi təqaüd almayanlardan yüksəkdir. Lakin bu nəticə təqaüdün birbaşa səbəb olduğunu deyil, uğurlu tələbələrin daha çox təqaüd alma ehtimalını göstərə bilər.
+
+Ümumi qiymətləndirməyə əsasən tələbə performansına ən çox təsir göstərən faktorlar davamiyyət səviyyəsi və akademik nəticələrdir. Xüsusilə yüksək davamiyyət GPA-nın yüksəlməsi ilə əlaqələndirilir.
+""")
+
+
