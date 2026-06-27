@@ -182,20 +182,16 @@ plt.show()
 
 # 15 Mini nəticə hesabatı:
 
-print("""
-Dataset 120 tələbə məlumatından və 10 sütundan ibarətdir. Analiz zamanı müəyyən olundu ki, bəzi sütunlarda boş dəyərlər mövcuddur. GPA sütunundakı boş xanalar median ilə, Department sütunundakı boş xana isə ən çox təkrarlanan dəyərlə əvəz edildi.
+print("""Dataset 120 tələbə və 10 sütundan ibarətdir, 5 fakültəni əhatə edir. 
+Boş dəyərlər GPA (2), Department (1), MathScore (1) və AttendanceRate (1) sütunlarında mövcud idi və median/mode ilə dolduruldu.
 
-Statistik göstəricilərə əsasən GPA-nın orta qiyməti ilə medianı bir-birinə çox yaxındır. Bu da GPA göstəricilərinin balanslı paylandığını göstərir. MathScore nəticələrində isə median ortalamadan bir qədər yüksəkdir ki, bu da aşağı balların orta göstəriciyə təsir etdiyini göstərir.
+GPA üzrə orta qiymət 3.01, median 3.00, standart sapma 0.40-dır. Bu, paylanmanın demək olar ki, simmetrik olduğunu göstərir.
 
-Outlier araşdırması həm IQR, həm də Z-score metodları ilə aparıldı. Nəticədə MathScore üzrə ciddi kənar dəyər aşkar edilmədi. Bu isə məlumatların ümumilikdə stabil olduğunu göstərir.
+MathScore üzrə mean 68.76, median 71.00 və std 12.92-dir, bu isə bir qədər dəyişkənlik olduğunu göstərir.
 
-Korrelyasiya analizində GPA ilə davamiyyət (AttendanceRate) arasında ən güclü müsbət əlaqə müşahidə edildi. Yazı və riyaziyyat nəticələri də GPA ilə nəzərəçarpacaq əlaqəyə malikdir. Riyaziyyat və yazı balları arasında isə ən yüksək qarşılıqlı əlaqə qeydə alındı.
+Outlier analizi (IQR və Z-score) nəticəsində ciddi anormal dəyərlər aşkar edilmədi.
 
-Fakültələr üzrə müqayisədə Economics tələbələri ən yüksək orta GPA göstəricisinə sahibdir. Tələbə sayına görə isə IT fakültəsi digərlərindən daha çox təmsil olunmuşdur.
+Korelyasiya nəticələrinə görə ən güclü əlaqələr WritingScore ilə MathScore (0.72) və GPA ilə AttendanceRate (0.68) arasında müşahidə olunur.
 
-Təqaüd alan tələbələrin orta GPA göstəricisi təqaüd almayanlardan yüksəkdir. Lakin bu nəticə təqaüdün birbaşa səbəb olduğunu deyil, uğurlu tələbələrin daha çox təqaüd alma ehtimalını göstərə bilər.
-
-Ümumi qiymətləndirməyə əsasən tələbə performansına ən çox təsir göstərən faktorlar davamiyyət səviyyəsi və akademik nəticələrdir. Xüsusilə yüksək davamiyyət GPA-nın yüksəlməsi ilə əlaqələndirilir.
+Ümumi nəticəyə əsasən tələbə performansına ən çox təsir edən faktorlar AttendanceRate, WritingScore və MathScore göstəriciləridir.
 """)
-
-
