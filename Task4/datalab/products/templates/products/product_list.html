@@ -3,7 +3,11 @@
     {{ form.as_p }}
     <button type="submit">Filter</button>
 </form>
-
+<p>
+    <a href="{% url 'product_upload' %}">Upload</a>
+    <a href="{% url 'product_export' %}">Export (Excel)</a>
+    <a href="{% url 'stats' %}">Statistics</a>
+</p>
 <table border="1" cellpadding="6">
     <tr>
         <th>SKU</th> <th>Name</th> <th>Category</th> <th>Price</th> <th>Count</th> <th>Date</th>
@@ -25,8 +29,3 @@
     {% endfor %}
 </table>
 
-<p>
-    <a href="{% url 'product_upload' %}">Upload</a>
-<!--{#    <a href="{% url 'product_export' %}">Export (Excel)</a>#}-->
-<!--{#    <a href="{% url 'stats' %}">Statistics</a>#}-->
-</p>

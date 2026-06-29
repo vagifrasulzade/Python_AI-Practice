@@ -1,8 +1,10 @@
 import os
 from email.policy import default
 
+import pandas as pd
 from django.conf import settings
 from django.db.models import Sum, Avg,F, Count, ExpressionWrapper,DecimalField
+from django.db.models.functions import TruncMonth, ExtractQuarter
 
 from django.shortcuts import render
 
@@ -50,11 +52,7 @@ def product_upload(request):
                 for ch in up.chunks():
                     dest.write(ch)
 
-            try:
-                df=utils.read_any(fpath,sheet)
-            except ValueError:
-                ctx["error"]="Bele bir sheet tapilmadi. Sheet adini duzgun yazin ve ya bos buraxin."
-                return render(request,"products/upload.html",ctx)
+            df=utils.read_any(fpath,sheet)
             df=utils.normalize_for_product(df)
 
             rows=df.to_dict("records")
@@ -89,21 +87,67 @@ def product_upload(request):
 
     return render(request,"products/upload.html",ctx)
 
+def product_export(request):
+    qs=Product.objects.all().order_by("tx_date","sku")
+    data=qs.values('sku','name','category','price','quantity','tx_date')
+    df=pd.DataFrame.from_records(data)
+    path=utils.df_to_excel_response(df,"products_export.xlsx")
+    return FileResponse(open(path,"rb"),as_attachment=True,filename=os.path.basename(path))
+
+def stats_view(request):
+    revenue_exr=ExpressionWrapper(F('price')*F('quantity'),output_field=DecimalField(max_digits=12,decimal_places=2))
+
+    #Monthly income
+    monthly=(Product.objects
+             .annotate(month=TruncMonth("tx_date"))
+             .values("month")
+             .annotate(revenue=Sum(revenue_exr),items=Count("id"))
+             )
+
+    #2 Quarterly income
+    quarterly=(Product.objects
+               .annotate(q=ExtractQuarter("tx_date"))
+               .values("q")
+               .annotate(revenue=Sum(revenue_exr),avg_price=Avg('price'))
+               .order_by("q")
+               )
+
+    by_cat=(Product.objects
+            .values("category")
+            .annotate(mean_price=Avg('price'),total_qty=Sum('quantity'))
+            .order_by("-total_qty"))
+
+    top_sku=(Product.objects
+            .values("sku","name","category")
+             .annotate(revenue=Sum(revenue_exr),qty=Sum("quantity"))
+             .order_by("-revenue")[:10]
+             )
+
+    low_stock=(Product.objects
+               .filter(quantity__lte=5).order_by("quantity","name")[:10]
+               )
+
+    ctx=dict(monthly=monthly,quarterly=quarterly,by_cat=by_cat,top_sku=top_sku,
+    low_stock=low_stock)
+
+    return render(request,"products/stats.html",ctx)
+
+
 
 def product_list(request):
     form=DateFilterForm(request.GET or None)
     qs=Product.objects.all().order_by("-tx_date","-id")
 
     if form.is_valid():
-        nm=form.cleaned_data.get("name")
+        name=form.cleaned_data.get("name")
         qmin=form.cleaned_data.get("quantity_min")
         qmax=form.cleaned_data.get("quantity_max")
         df=form.cleaned_data.get("date_from")
         dt=form.cleaned_data.get("date_to")
         cat=form.cleaned_data.get("category")
 
-        if nm:
-            qs=qs.filter(name__icontains=nm)
+        if name:
+            qs=qs.filter(name__icontains=name)
         if qmin is not None:
             qs=qs.filter(quantity__gte=qmin)
         if qmax is not None:
@@ -116,11 +160,3 @@ def product_list(request):
             qs=qs.filter(category__icontains=cat)
 
     return render(request,"products/product_list.html",{"qs":qs,"form":form})
-
-def product_download(request):
-    file_path = os.path.join(
-        settings.MEDIA_ROOT,
-        "products",
-        "product_template.xlsx"
-    )
-    return FileResponse(open(file_path,"rb"),as_attachment=True,filename="product_template.xlsx")
