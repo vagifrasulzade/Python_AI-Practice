@@ -134,6 +134,11 @@ def stats_view(request):
 
 
 
+def download_template(request):
+    template_path = os.path.join(settings.MEDIA_ROOT, 'uploads', 'product_template.xlsx')
+    return FileResponse(open(template_path, 'rb'), as_attachment=True, filename='product_template.xlsx')
+
+
 def product_list(request):
     form=DateFilterForm(request.GET or None)
     qs=Product.objects.all().order_by("-tx_date","-id")
