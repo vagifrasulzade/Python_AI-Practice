@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import render
 
 from . import ml
@@ -5,9 +7,9 @@ from . import ml
 
 def index(request):
     result = None
+    stamp = None          # cache-buster for the per-user images
 
     if request.method == "POST":
-        # Read the values from the simple HTML inputs
         age = int(request.POST["age"])
         bmi = float(request.POST["bmi"])
         glucose = float(request.POST["glucose"])
@@ -17,4 +19,10 @@ def index(request):
 
         result = ml.predict(age, bmi, glucose, bp, family, exercise)
 
-    return render(request, "predictor/index.html", {"result": result})
+        # per-user charts (gauge + personal SHAP)
+        ml.make_gauge(result["xgb"])
+        ml.make_user_shap(result["row"])
+        stamp = int(time.time())
+
+    return render(request, "predictor/index.html",
+                  {"result": result, "stamp": stamp})
