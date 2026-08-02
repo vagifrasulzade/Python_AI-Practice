@@ -1,1 +1,1 @@
-## 2-ci qrup — EfficientNet-B0
+## EfficientNet-B0
