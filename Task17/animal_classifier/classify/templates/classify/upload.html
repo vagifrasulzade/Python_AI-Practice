@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifier (EfficientNet-B0)</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'classify/upload.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <span class="badge">Deep Learning</span>
+        <h2>Image Classifier</h2>
+        <p class="subtitle">İstənilən şəkil yükləyin &mdash; EfficientNet-B0 modeli ImageNet siniflərinə görə onu təxmin etməyə çalışacaq.</p>
+
+        <div class="card">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Təxmin Et</button>
+            </form>
+        </div>
+
+        {% if image_url %}
+        <div class="result">
+            <h3>Nəticə</h3>
+            <img src="{{ image_url }}" alt="Uploaded image"/>
+        </div>
+        {% endif %}
+
+        {% if results %}
+        <div class="result">
+            <h4>Top 5 sinif:</h4>
+            <ul>
+                {% for label, prob in results %}
+                <li>
+                    <span class="label">{{ label }}</span>
+                    <span class="prob">{{ prob|floatformat:2 }}%</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="footer">Powered by EfficientNet-B0 + ImageNet</div>
+    </div>
+</body>
+
+</html>
