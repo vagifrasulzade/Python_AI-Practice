@@ -1,0 +1,70 @@
+{% extends "movies/base.html" %}
+{% load movie_extras %}
+
+{% block title %}My List{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <span class="accent-bar"></span>
+        <div>
+            <h2>My Favorites❤️</h2>
+            <p class="section-sub">The movies you loved. Remove the ones you don't want anymore.</p>
+        </div>
+    </div>
+
+    {% if movies %}
+    <div class="movie-grid">
+        {% for movie in movies %}
+            <article class="movie-card">
+                <div class="poster-wrap">
+                    {% if movie.display_image %}
+                        <img
+                            src="{{ movie.display_image }}"
+                            alt="{{ movie.title }}"
+                            class="poster"
+                            loading="lazy"
+                            onerror="this.src='https://placehold.co/400x600?text=No+Poster';"
+                        >
+                    {% else %}
+                        <img
+                            src="https://placehold.co/400x600?text=No+Poster"
+                            alt="{{ movie.title }}"
+                            class="poster"
+                        >
+                    {% endif %}
+                </div>
+
+                <div class="card-top">
+                    <div class="card-info">
+                        <h3>{{ movie.title }}</h3>
+                        <p class="card-meta">{{ movie.year }}</p>
+                    </div>
+                    <span class="card-rank">#{{ forloop.counter }}</span>
+                </div>
+
+                <p class="card-desc">{{ movie.description|truncatechars:120 }}</p>
+
+                <div class="card-bottom">
+                    {% if movie.genre %}
+                    <div class="card-genres">
+                        {% for genre in movie.genre|genre_list|slice:":3" %}
+                            <span class="genre-chip">{{ genre }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'toggle_like' movie.id %}" class="card-action">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'liked_movies' %}">
+                        <button type="submit" class="like-pill liked" title="Unlike">♥ Remove</button>
+                    </form>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="notice">Your list is empty. Go to Movies and tap the heart on the ones you enjoy.</div>
+    {% endif %}
+</section>
+{% endblock %}

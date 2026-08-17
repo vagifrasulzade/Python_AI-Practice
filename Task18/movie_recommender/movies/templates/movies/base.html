@@ -1,0 +1,42 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Movie Recommender{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'movies/style.css' %}">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-inner">
+        <a class="brand" href="{% url 'movie_list' %}">Cinema<span class="brand-accent">Picks</span></a>
+
+        <nav class="nav-links">
+            <a href="{% url 'movie_list' %}">Movies</a>
+            <a href="{% url 'liked_movies' %}">Likes</a>
+            <a href="{% url 'recommendations' %}">For You</a>
+        </nav>
+
+        <form class="search-form" method="get" action="{% url 'movie_list' %}">
+            <input
+                type="search"
+                name="q"
+                class="search-input"
+                placeholder="Search movies..."
+                value="{{ query }}"
+                aria-label="Search movies"
+            >
+            <button type="submit" class="search-btn" aria-label="Search">🔍</button>
+        </form>
+    </div>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

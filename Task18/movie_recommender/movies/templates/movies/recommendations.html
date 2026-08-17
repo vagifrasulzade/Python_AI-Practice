@@ -1,0 +1,72 @@
+{% extends "movies/base.html" %}
+{% load movie_extras %}
+
+{% block title %}Recommendations{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-head">
+        <span class="accent-bar"></span>
+        <div>
+            <h2>Recommended For You</h2>
+            <p class="section-sub">Picked from what you liked using TF-IDF and cosine similarity.</p>
+        </div>
+    </div>
+
+    {% if recommendations %}
+    <div class="movie-grid">
+        {% for item in recommendations %}
+            <article class="movie-card">
+                <div class="poster-wrap">
+                    {% if item.movie.display_image %}
+                        <img
+                            src="{{ item.movie.display_image }}"
+                            alt="{{ item.movie.title }}"
+                            class="poster"
+                            loading="lazy"
+                            onerror="this.src='https://placehold.co/400x600?text=No+Poster';"
+                        >
+                    {% else %}
+                        <img
+                            src="https://placehold.co/400x600?text=No+Poster"
+                            alt="{{ item.movie.title }}"
+                            class="poster"
+                        >
+                    {% endif %}
+                </div>
+
+                <div class="card-top">
+                    <div class="card-info">
+                        <h3>{{ item.movie.title }}</h3>
+                        <p class="card-meta">{{ item.movie.year }}</p>
+                    </div>
+                    <span class="card-rank">#{{ forloop.counter }}</span>
+                </div>
+
+                <p class="card-desc">{{ item.movie.description|truncatechars:120 }}</p>
+
+                <div class="card-bottom">
+                    {% if item.movie.genre %}
+                    <div class="card-genres">
+                        {% for genre in item.movie.genre|genre_list|slice:":3" %}
+                            <span class="genre-chip">{{ genre }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <p class="score">✓ {{ item.score }}% match</p>
+
+                    <form method="post" action="{% url 'toggle_like' item.movie.id %}" class="card-action">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{% url 'recommendations' %}">
+                        <button type="submit" class="like-pill" title="Like">♡ Like</button>
+                    </form>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    {% else %}
+        <div class="notice">Like at least one movie first — then your personal picks will show up here.</div>
+    {% endif %}
+</section>
+{% endblock %}

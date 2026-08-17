@@ -1,0 +1,1 @@
+# Admin interface has been removed from this project.
