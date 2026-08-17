@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -6,6 +7,9 @@ from .models import Movie
 from .recommendation import recommend_movies
 
 LIKED_KEY = "liked_movie_ids"
+
+# Bir sehifede nece kart gosterilsin
+PAGE_SIZE = 60
 
 
 def _liked_ids(request):
@@ -25,11 +29,16 @@ def movie_list(request):
 
     liked_ids = _liked_ids(request)
 
+    paginator = Paginator(movies, PAGE_SIZE)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
     return render(
         request,
         "movies/movie_list.html",
         {
-            "movies": movies,
+            "movies": page_obj.object_list,
+            "page_obj": page_obj,
+            "total_count": paginator.count,
             "liked_ids": liked_ids,
             "query": query,
         },
@@ -57,11 +66,16 @@ def liked_movies(request):
     liked_ids = _liked_ids(request)
     movies = Movie.objects.filter(id__in=liked_ids).order_by("title")
 
+    paginator = Paginator(movies, PAGE_SIZE)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
     return render(
         request,
         "movies/liked_movies.html",
         {
-            "movies": movies,
+            "movies": page_obj.object_list,
+            "page_obj": page_obj,
+            "total_count": paginator.count,
             "liked_ids": liked_ids,
         },
     )

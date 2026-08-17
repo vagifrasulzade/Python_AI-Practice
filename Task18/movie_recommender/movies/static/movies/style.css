@@ -481,6 +481,50 @@ a {
     color: var(--red);
 }
 
+/* ---------- Pagination ---------- */
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 36px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+
+a.page-btn:hover {
+    color: var(--accent);
+    border-color: rgba(79, 70, 229, 0.35);
+    background: rgba(79, 70, 229, 0.06);
+}
+
+.page-btn.active {
+    background: var(--grad);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
+}
+
+.page-btn.disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
 /* ---------- Notices ---------- */
 .notice {
     padding: 48px 24px;

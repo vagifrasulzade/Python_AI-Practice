@@ -9,7 +9,7 @@
         <span class="accent-bar"></span>
         <div>
             <h2>My Favorites❤️</h2>
-            <p class="section-sub">The movies you loved. Remove the ones you don't want anymore.</p>
+            <p class="section-sub">{{ total_count }} movie{{ total_count|pluralize }} you loved. Remove the ones you don't want anymore.</p>
         </div>
     </div>
 
@@ -40,7 +40,7 @@
                         <h3>{{ movie.title }}</h3>
                         <p class="card-meta">{{ movie.year }}</p>
                     </div>
-                    <span class="card-rank">#{{ forloop.counter }}</span>
+                    <span class="card-rank">#{{ forloop.counter0|add:page_obj.start_index }}</span>
                 </div>
 
                 <p class="card-desc">{{ movie.description|truncatechars:120 }}</p>
@@ -63,6 +63,8 @@
             </article>
         {% endfor %}
     </div>
+
+    {% include "movies/_pagination.html" %}
     {% else %}
         <div class="notice">Your list is empty. Go to Movies and tap the heart on the ones you enjoy.</div>
     {% endif %}

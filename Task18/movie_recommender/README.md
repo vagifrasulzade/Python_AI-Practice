@@ -53,6 +53,20 @@ http://127.0.0.1:8000
 
 > `import_movies` `real_movies_sample.xlsx` faylından ilk 60 filmi oxuyur (`Title`, `Description`, `ImageUrl` sütunları tələb olunur) və hər biri üçün OMDb-dən poster, il, janr çəkir. Açar olmasa da işləyir — sadəcə poster və janr boş qalır.
 
+## Random import (Excel-siz)
+
+Excel faylına bağlı qalmaq istəmirsənsə, filmləri birbaşa OMDb-dən random çəkə bilərsən:
+
+```bash
+python manage.py import_random_movies                    # 60 film
+python manage.py import_random_movies --count 20         # 20 film
+python manage.py import_random_movies --count 20 --seed 7  # təkrarlana bilən nəticə
+```
+
+OMDb-nin random endpoint-i olmadığı üçün belə işləyir: əvvəlcədən hazırlanmış açar söz siyahısından (`love`, `space`, `night`, `ghost`…) random söz seçilir, `s=` axtarışının random səhifəsi çəkilir, nəticələr qarışdırılır və hər film üçün `i=` ilə tam məlumat (plot, janr, il, poster) alınır.
+
+Plot-u `N/A` olan filmlər atlanır — TF-IDF təsvir üzərində işlədiyi üçün boş plot tövsiyəni korlayar.
+
 ## Data mənbəyi
 
 `real_movies_sample.xlsx` — 64 sətir, 3 sütun:
@@ -88,7 +102,8 @@ movie_recommender/
 │   ├── omdb.py                 # OMDb API client
 │   ├── urls.py
 │   ├── management/commands/
-│   │   └── import_movies.py    # Excel + OMDb import
+│   │   ├── import_movies.py        # Excel + OMDb import
+│   │   └── import_random_movies.py # OMDb-dən random import
 │   ├── templatetags/
 │   │   └── movie_extras.py     # genre_list filtri
 │   ├── templates/movies/       # base, movie_list, liked_movies, recommendations

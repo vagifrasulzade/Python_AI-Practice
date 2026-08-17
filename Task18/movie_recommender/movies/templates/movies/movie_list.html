@@ -10,10 +10,10 @@
         <div>
             {% if query %}
                 <h2>Search results for "{{ query }}"</h2>
-                <p class="section-sub">{{ movies|length }} movie{% if movies|length != 1 %}s{% endif %} found.</p>
+                <p class="section-sub">{{ total_count }} movie{{ total_count|pluralize }} found.</p>
             {% else %}
                 <h2>Popular on CinemaPicks🎬</h2>
-                <p class="section-sub">Like movies you enjoy and get smarter recommendations.</p>
+                <p class="section-sub">{{ total_count }} movies — like the ones you enjoy and get smarter recommendations.</p>
             {% endif %}
         </div>
     </div>
@@ -44,7 +44,7 @@
                         <h3>{{ movie.title }}</h3>
                         <p class="card-meta">{{ movie.year }}</p>
                     </div>
-                    <span class="card-rank">#{{ forloop.counter }}</span>
+                    <span class="card-rank">#{{ forloop.counter0|add:page_obj.start_index }}</span>
                 </div>
 
                 <p class="card-desc">{{ movie.description|truncatechars:120 }}</p>
@@ -73,5 +73,7 @@
             <div class="notice">No movies found. Try a different search.</div>
         {% endfor %}
     </div>
+
+    {% include "movies/_pagination.html" %}
 </section>
 {% endblock %}
